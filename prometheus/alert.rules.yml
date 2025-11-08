@@ -1,0 +1,54 @@
+groups:
+- name: demo-alerts
+  rules:
+
+  # 1️⃣ Startup alert: fires immediately on Prometheus startup
+  - alert: StartupAlert
+    expr: time() > bool 0
+    for: 1s
+    labels:
+      severity: info
+    annotations:
+      summary: "Prometheus Startup Alert"
+      description: "This alert fires immediately on Prometheus startup for demonstration."
+
+  # 2️⃣ CPU usage alert
+  - alert: HighCPUUsage
+    expr: 100 - (avg by (instance)(irate(node_cpu_seconds_total{mode="idle"}[1m])) * 100) > 50
+    for: 2m
+    labels:
+      severity: critical
+    annotations:
+      summary: "High CPU Usage Detected"
+      description: "CPU usage on {{ $labels.instance }} exceeded threshold."
+
+  # 3️⃣ Memory usage alert
+  - alert: HighMemoryUsage
+    expr: 100 * (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) > 40
+    for: 2m
+    labels:
+      severity: warning
+    annotations:
+      summary: "High Memory Usage Detected"
+      description: "Memory usage on {{ $labels.instance }} exceeded 40%."
+
+  # 4️⃣ Disk usage alert
+  - alert: HighDiskUsage
+    expr: (1 - (node_filesystem_avail_bytes{fstype!~"tmpfs|overlay"} / node_filesystem_size_bytes{fstype!~"tmpfs|overlay"})) * 100 > 50
+    for: 2m
+    labels:
+      severity: warning
+    annotations:
+      summary: "High Disk Usage Detected"
+      description: "Disk usage on {{ $labels.instance }} exceeded 50%."
+
+  # 5️⃣ Network traffic alert
+  - alert: HighNetworkTraffic
+    expr: sum by (instance) (rate(node_network_receive_bytes_total[1m]) + rate(node_network_transmit_bytes_total[1m])) > 500000
+    for: 1m
+    labels:
+      severity: info
+    annotations:
+      summary: "High Network Traffic"
+      description: "Network traffic on {{ $labels.instance }} is high (>500KB/sec)."
+

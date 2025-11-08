@@ -1,0 +1,16 @@
+global:
+  resolve_timeout: 1m
+
+route:
+  receiver: 'default'
+
+receivers:
+  - name: 'default'
+    email_configs:
+      - to: 'nikitabobade1067@gmail.com'
+        from: 'nikitabobade1067@gmail.com'
+        smarthost: 'smtp.gmail.com:587'
+        auth_username: 'nikitabobade1067@gmail.com'
+        auth_identity: 'nikitabobade1067@gmail.com'
+        auth_password: 'gsmz lyyb ptqz qywv'
+        require_tls: true

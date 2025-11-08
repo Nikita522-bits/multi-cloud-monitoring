@@ -1,0 +1,52 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['prometheus:9090']
+
+  - job_name: 'aws_vm'
+    static_configs:
+      - targets: ['node1:9100']
+        labels:
+          cloud: "AWS"
+
+  - job_name: 'azure_vm'
+    static_configs:
+      - targets: ['node2:9100']
+        labels:
+          cloud: "Azure"
+
+  - job_name: 'gcp_vm'
+    static_configs:
+      - targets: ['node3:9100']
+        labels:
+          cloud: "GCP"
+
+  - job_name: 'azure_real_vm'
+    static_configs:
+      - targets: ['40.81.234.62:9100']
+        labels:
+          cloud: "Azure"
+
+  - job_name: 'gcp-real-vm'
+    static_configs:
+      - targets: ['104.154.165.17:9100']
+        labels:
+          cloud: 'GCP'
+
+
+
+
+
+
+rule_files:
+  - "alert.rules.yml"
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+            - 'alertmanager:9093'
